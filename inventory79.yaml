@@ -1,0 +1,130 @@
+operation: inventory/tshirt
+batch:
+- name: Tshirt-CS-79180-COTTON-DTF
+  availability: available
+  sizes:
+  - M
+  - L
+  - XL
+  colors:
+  - black
+  - white
+  variants:
+  - id: 1
+    name: Spider-man
+    details:
+      material: Cotton
+      design_type: DTF
+      color: black
+      rating: 5
+    stock:
+      M: 0
+      L: 2
+      XL: 1
+    edition: standard
+    price: 270
+    cost: 225
+  - id: 2
+    name: Eagle design
+    details:
+      material: Cotton
+      design_type: DTF
+      color: white
+      rating: 3
+    stock:
+      M: 10
+      L: 23
+      XL: 11
+    edition: standard
+    price: 270
+    cost: 225
+  - id: 3
+    name: Terminator
+    details:
+      material: Cotton
+      design_type: DTF
+      color: black
+      rating: 3
+    stock:
+      M: 1
+      L: 3
+      XL: 11
+    edition: standard
+    price: 250
+    cost: 205
+  - id: 4
+    name: Level
+    details:
+      material: Cotton
+      design_type: DTF
+      rating: 4
+    stock: 30
+    edition: standard
+    price: 250
+    cost: 210
+  - id: 5
+    name: Disclosure
+    details:
+      material: Cotton
+      design_type: DTF
+      color: white
+      rating: 3
+    stock:
+      M: 10
+      L: 2
+      XL: 11
+    edition: limited
+    price: 250
+    cost: 210
+  supplier:
+    name: Cryston India
+    location: Surat
+    rating: 3
+  created:
+    "$timestamp":
+      t: 0
+      i: 0
+  batchprice: 250
+  batchcost: 200
+  batchid: 1
+- name: Tshirt-CS-79180-COTTON-PLAIN
+  availability: not available
+  sizes:
+  - M
+  - L
+  - XL
+  colors:
+    black:
+      M: 10
+      L: 23
+      XL: 11
+    white:
+      M: 3
+      L: 5
+      XL: 7
+  variants:
+  - id: 6
+    name: Plain Variant
+    details:
+      material: Cotton
+      design_type: Plain
+      color: white
+      rating: 3
+    stock:
+      M: 10
+      L: 2
+      XL: 11
+    edition: plain
+    price: 220
+    cost: 175
+  supplier:
+    name: Cryston India
+    location: Surat
+    rating: 3
+  created:
+    "$timestamp":
+      t: 0
+      i: 0
+  batchprice: 250
+  batchcost: 175
+  batchid: 2
