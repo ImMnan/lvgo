@@ -1,122 +1,115 @@
 package main
 
 import (
-	// Add required Go packages
 	"context"
-	"log"
+	"fmt"
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
-
-	// Add the MongoDB driver packages
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-type Batch struct {
-	ID           string                    `json:"id,omitempty" bson:"_id,omitempty"`
-	Operation    string                    `json:"operation" bson:"operation"`
-	Purchase     int                       `json:"purchase" bson:"purchase"`
-	Availability string                    `json:"availability" bson:"availability"`
-	Sizes        []string                  `json:"sizes" bson:"sizes"`
-	Colors       map[string]map[string]int `json:"colors" bson:"colors"`
-	Variants     []Variant                 `json:"variants" bson:"variants"`
-	Supplier     Supplier                  `json:"supplier" bson:"supplier"`
-	CurrentStock int                       `json:"current_stock" bson:"current_stock"`
-}
-
-// Variant represents the data structure for a T-shirt variant
-type Variant struct {
-	ID      int         `json:"id,omitempty" bson:"id,omitempty"`
-	Name    string      `json:"name" bson:"name"`
-	Details VariantInfo `json:"details" bson:"details"`
-	Stock   int         `json:"stock" bson:"stock"`
-}
-
-// VariantInfo represents additional details for a T-shirt variant
-type VariantInfo struct {
-	Material   string `json:"material" bson:"material"`
-	DesignType string `json:"design_type" bson:"design_type"`
-	Rating     int    `json:"rating" bson:"rating"`
-}
-
-// Supplier represents the data structure for a T-shirt supplier
-type Supplier struct {
-	Name     string `json:"name" bson:"name"`
-	Location string `json:"location" bson:"location"`
-	Rating   int    `json:"rating" bson:"rating"`
-}
-
 // Your MongoDB Atlas Connection String
-const uri = "mongodb+srv://mpatel:mnanhsm333dj@level79db.ycxykby.mongodb.net/?retryWrites=true&w=majority"
+const (
+	mongoURI       = "mongodb+srv://mananhsmpatel:CWL6x9CTDtRRXmQy@level79db.ycxykby.mongodb.net/?retryWrites=true&w=majority"
+	databaseName   = "Level79-Clothing"
+	collectionName = "Tshirt-inventory"
+	batchOperation = "inventory/tshirt"
+)
 
 // A global variable that will hold a reference to the MongoDB client
 var mongoClient *mongo.Client
 
-// The init function will run before our main function to establish a connection to MongoDB. If it cannot connect it will fail and the program will exit.
+// The init function will run before our main function to establish a connection to MongoDB. If it cannot connect, it will fail, and the program will exit.
 func init() {
-	if err := connect_to_mongodb(); err != nil {
-		log.Fatal("Could not connect to MongoDB")
+	if err := connectToMongoDB(); err != nil {
+		fmt.Println("Could not connect to MongoDB")
 	}
 }
 
 func main() {
-	// Connect to MongoDB
-	clientOptions := options.Client().ApplyURI("mongodb://localhost:27017")
-	client, err := mongo.Connect(context.TODO(), clientOptions)
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer client.Disconnect(context.TODO())
-
-	// Initialize GIN
 	r := gin.Default()
+	r.GET("/", func(c *gin.Context) {
+		c.JSON(http.StatusOK, gin.H{
+			"message": "Hello, this is the level79 Database for inventory management",
+		})
+	})
 
-	// Routes
-	r.GET("/batches", getBatches)
+	r.GET("/batches", getAllBatches)
+	r.GET("/batches/:batchid", getBatchByID)
+	//r.GET("/batches/:batchid", getBatchByID) // New endpoint to get batch by batchid
 
 	// Run the server
-	if err := r.Run(":8080"); err != nil {
-		log.Fatal(err)
+	if err := r.Run(":818"); err != nil {
+		fmt.Println("Error starting server:", err)
 	}
+	// Run the server
+	r.Run(":818")
 }
 
 // Our implementation logic for connecting to MongoDB
-func connect_to_mongodb() error {
+func connectToMongoDB() error {
 	serverAPI := options.ServerAPI(options.ServerAPIVersion1)
-	opts := options.Client().ApplyURI(uri).SetServerAPIOptions(serverAPI)
+	opts := options.Client().ApplyURI(mongoURI).SetServerAPIOptions(serverAPI)
 
 	client, err := mongo.Connect(context.TODO(), opts)
 	if err != nil {
-		panic(err)
+		return err
 	}
+
 	err = client.Ping(context.TODO(), nil)
-	mongoClient = client
-	return err
-}
-func getClient() *mongo.Client {
-	return mongoClient
-}
-
-func getBatches(c *gin.Context) {
-	var batches []Batch
-
-	cursor, err := getClient().Database("Level79-Clothing").Collection("Tshirt-inventory").Find(context.TODO(), bson.D{})
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return err
+	}
+
+	mongoClient = client
+	return nil
+}
+
+// Handler function to get all batches
+func getAllBatches(c *gin.Context) {
+	// Simulate fetching data from MongoDB, replace with your actual logic
+	collection := mongoClient.Database("Level79-Clothing").Collection("Tshirt-inventory")
+	result := collection.FindOne(context.TODO(), bson.M{"operation": "inventory/tshirt"})
+
+	var rawData map[string]interface{}
+	if err := result.Decode(&rawData); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Error decoding JSON"})
 		return
 	}
-	defer cursor.Close(context.TODO())
 
-	for cursor.Next(context.TODO()) {
-		var batch Batch
-		if err := cursor.Decode(&batch); err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-			return
-		}
-		batches = append(batches, batch)
+	batchData, exists := rawData["batch"]
+	if !exists {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Batch data not found"})
+		return
 	}
 
-	c.JSON(http.StatusOK, batches)
+	c.JSON(http.StatusOK, batchData)
+}
+
+func getBatchByID(c *gin.Context) {
+	batchID, err := strconv.Atoi(c.Param("batchid"))
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid batchid"})
+		return
+	}
+
+	collection := mongoClient.Database(databaseName).Collection(collectionName)
+	result := collection.FindOne(context.TODO(), bson.M{
+		"operation": batchOperation,
+		"batch": bson.M{
+			"$elemMatch": bson.M{"batchid": batchID},
+		},
+	})
+
+	var batch bson.M
+	if err := result.Decode(&batch); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": fmt.Sprintf("Error decoding JSON: %v", err)})
+		return
+	}
+
+	c.JSON(http.StatusOK, batch)
 }
