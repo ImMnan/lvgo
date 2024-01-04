@@ -1,0 +1,46 @@
+- availability: available
+  batchcost: 200
+  batchid: 3
+  batchprice: NA
+  colors:
+  - multi-color
+  created: "2-JAN-2024"
+  name: Design-DM-7930-DTF
+  sizes:
+  - NA
+  supplier:
+    location: Mumbai
+    name: Cryston India
+    rating: 3
+  variants:
+  - cost: 50
+    details:
+      color: black
+      design_type: DTF
+      material: Cotton/Poly
+      rating: 5
+    edition: standard
+    id: 1
+    name: Spider-man
+    price: NA
+    stock:
+      L: NA
+      M: NA
+      XL: NA
+      Total: 10
+
+  - cost: 30
+    details:
+      color: white
+      design_type: DTF
+      material: Cotton/Poly
+      rating: 5
+    edition: standard
+    id: 1
+    name: Disclosure
+    price: NA
+    stock:
+      L: NA
+      M: NA
+      XL: NA
+      Total: 13

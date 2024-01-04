@@ -1,14 +1,13 @@
 - availability: available
+  type: tshirt
   batchcost: 200
   batchid: 1
   batchprice: 250
   colors:
   - black
   - white
-  created:
-    T: 0
-    I: 0
-  name: Tshirt-CS-79180-COTTON-DTF
+  created: 1-JAN-2024
+  name: Tshirt-COTTON-DTF
   sizes:
   - M
   - L
@@ -19,6 +18,7 @@
     rating: 3
   variants:
   - cost: 225
+    printed: true
     details:
       color: black
       design_type: DTF
@@ -32,7 +32,9 @@
       L: 2
       M: 5
       XL: 1
+      Total: 8
   - cost: 225
+    printed: true
     details:
       color: white
       design_type: DTF
@@ -46,7 +48,9 @@
       L: 23
       M: 10
       XL: 11
+      Total: 44
   - cost: 205
+    printed: true
     details:
       color: black
       design_type: DTF
@@ -60,7 +64,9 @@
       L: 3
       M: 1
       XL: 11
+      Total: 15
   - cost: 210
+    printed: true
     details:
       color: black
       design_type: DTF
@@ -74,7 +80,9 @@
       L: 2
       M: 5
       XL: 1
+      Total: 8
   - cost: 210
+    printed: true
     details:
       color: white
       design_type: DTF
@@ -88,17 +96,17 @@
       L: 2
       M: 10
       XL: 11
+      Total: 23
 - availability: available
+  type: tshirt
   batchcost: 175
   batchid: 2
   batchprice: 250
   colors:
   - black
   - white
-  created:
-    T: 0
-    I: 0
-  name: Tshirt-CS-79180-COTTON-PLAIN
+  created: 02-JAN-2024
+  name: Tshirt-COTTON-PLAIN
   sizes:
   - M
   - L
@@ -109,9 +117,10 @@
     rating: 3
   variants:
   - cost: 175
+    printed: false
     details:
       color: white
-      design_type: Plain
+      design_type: NA
       material: Cotton
       rating: 3
     edition: plain
@@ -122,3 +131,53 @@
       L: 20
       M: 10
       XL: 23
+      Total: 53
+
+- availability: available
+  type: design
+  batchcost: 50
+  batchid: 3
+  batchprice: NA
+  colors:
+  - multi-color
+  created: "2-JAN-2024"
+  name: Design-DTF
+  sizes:
+  - NA
+  supplier:
+    location: Mumbai
+    name: Swastik India
+    rating: 3
+  variants:
+  - cost: 50
+    printed: false 
+    details:
+      color: black
+      design_type: DTF
+      material: Cotton/Poly
+      rating: 5
+    edition: standard
+    id: 1
+    name: Spider-man
+    price: NA
+    stock:
+      L: NA
+      M: NA
+      XL: NA
+      Total: 10
+  - cost: 30
+    printed: false 
+    details:
+      color: white
+      design_type: DTF
+      material: Cotton/Poly
+      rating: 5
+    edition: standard
+    id: 1
+    name: Disclosure
+    price: NA
+    stock:
+      L: NA
+      M: NA
+      XL: NA
+      Total: 13
